@@ -42,15 +42,41 @@ public class SlideView extends ViewGroup {
 
     }
 
-    /*@Override
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }*/
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childView = getChildAt(i);
+            measureChild(childView,widthMeasureSpec,heightMeasureSpec);
+        }
+    }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int childCount = getChildCount();
-        Log.d("qhh",">>> childCount = " + childCount);
+
+        if(changed){
+            int childCount = getChildCount();
+            Log.d("qhh",">>> childCount = " + childCount);
+            int previousWidth = 0;
+            for (int i = 0; i < childCount; i++) {
+                View childView = getChildAt(i);
+
+                /*childView.layout(i * childView.getMeasuredWidth() + previousWidth, 0,
+                        (i + 1) * childView.getMeasuredWidth() + previousWidth,
+                        childView.getMeasuredHeight());*/
+
+                childView.layout(previousWidth, 0,
+                        childView.getMeasuredWidth() + previousWidth,
+                        childView.getMeasuredHeight());
+                previousWidth += childView.getMeasuredWidth();
+
+                Log.i("qhh",">>> i = " + i + " , childView Width = " + childView.getMeasuredWidth()
+                 + " , childView Height = " + childView.getMeasuredHeight());
+            }
+
+        }
+
     }
 
     /*@Override
