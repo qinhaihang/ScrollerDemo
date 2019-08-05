@@ -1,6 +1,7 @@
 package com.sensetime.scrollerdemo;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -45,6 +46,7 @@ public class SlideView extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        Log.i("qhh","onMeasure");
         int childCount = getChildCount();
         for (int i = 0; i < childCount; i++) {
             View childView = getChildAt(i);
@@ -54,7 +56,7 @@ public class SlideView extends ViewGroup {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
+        Log.i("qhh","onLayout changed " + changed);
         if(changed){
             int childCount = getChildCount();
             Log.d("qhh",">>> childCount = " + childCount);
@@ -79,10 +81,11 @@ public class SlideView extends ViewGroup {
 
     }
 
-    /*@Override
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-    }*/
+        Log.i("qhh","onDraw");
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -95,11 +98,17 @@ public class SlideView extends ViewGroup {
         super.computeScroll();
         if(mScroller.computeScrollOffset()){
             //当在View中则是移动View中的内容，如果parent是ViewGroup 则会移动整体的ViewGroup中所有的内容
-            ((View) getParent()).scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+            //((View) getParent()).scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
             invalidate();
         }
     }
 
+    /**
+     * 单位是像素
+     * @param destX
+     * @param DestY
+     */
     public void smoothScrollTo(int destX,int DestY){
         int scrollX = getScrollX();
         int delta = destX - scrollX;

@@ -16,6 +16,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click(View view) {
-        mSlideView.smoothScrollTo(30,0);
+        mSlideView.smoothScrollTo(275,0);
     }
 }
