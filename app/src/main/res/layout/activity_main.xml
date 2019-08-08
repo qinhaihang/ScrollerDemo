@@ -7,6 +7,7 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/btn_scroll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -29,15 +30,19 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:onClick="click"
             android:text="1" />
 
         <TextView
+            android:id="@+id/tv_right"
             android:layout_width="275px"
             android:layout_height="match_parent"
             android:background="#F30606"
             android:gravity="left"
+            android:onClick="click"
             android:text="2" />
 
     </com.sensetime.scrollerdemo.SlideView>

@@ -3,6 +3,7 @@ package com.sensetime.scrollerdemo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +17,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click(View view) {
-        mSlideView.smoothScrollTo(275,0);
+        
+        switch(view.getId()){
+            case R.id.btn_scroll:
+                mSlideView.smoothScrollTo(275,0);
+                break;
+            case R.id.tv_content:
+                Toast.makeText(this,"content",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tv_right:
+                Toast.makeText(this,"rigth",Toast.LENGTH_SHORT).show();
+                break;
+            default:
+                break;
+        }
+        
     }
 }

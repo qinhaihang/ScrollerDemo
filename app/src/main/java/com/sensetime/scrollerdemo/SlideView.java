@@ -29,6 +29,10 @@ public class SlideView extends ViewGroup {
     private float mLastXMove;
     private float mXMove;
     private int mTouchSlop;
+    private int mLeftBorder;
+    private int mRightChildW;
+    private int mViewWidth;
+    private int mRightBorder;
 
     public SlideView(Context context) {
         super(context);
@@ -74,7 +78,6 @@ public class SlideView extends ViewGroup {
         Log.i("qhh", "onLayout changed " + changed);
         if (changed) {
             int childCount = getChildCount();
-            Log.d("qhh", ">>> childCount = " + childCount);
             int previousWidth = 0;
             for (int i = 0; i < childCount; i++) {
                 View childView = getChildAt(i);
@@ -83,15 +86,22 @@ public class SlideView extends ViewGroup {
                         (i + 1) * childView.getMeasuredWidth() + previousWidth,
                         childView.getMeasuredHeight());*/
 
+                childView.setClickable(true);
+
                 childView.layout(previousWidth, 0,
                         childView.getMeasuredWidth() + previousWidth,
                         childView.getMeasuredHeight());
                 previousWidth += childView.getMeasuredWidth();
-
-                Log.i("qhh", ">>> i = " + i + " , childView Width = " + childView.getMeasuredWidth()
-                        + " , childView Height = " + childView.getMeasuredHeight());
             }
 
+            mLeftBorder = getChildAt(0).getLeft();
+            mRightBorder = getChildAt(childCount - 1).getRight();
+            mRightChildW = getChildAt(childCount - 1).getWidth();
+            mViewWidth = getWidth();
+
+            Log.i("qhh_move", ">>> mLeftBorder = " + mLeftBorder);
+            Log.i("qhh_move", ">>> mRightChildW = " + mRightChildW);
+            Log.i("qhh_move", ">>> width = " + mViewWidth);
         }
 
     }
@@ -101,11 +111,6 @@ public class SlideView extends ViewGroup {
         super.onDraw(canvas);
         Log.i("qhh", "onDraw");
     }
-
-    /*@Override
-    public boolean onInterceptHoverEvent(MotionEvent event) {
-        return super.onInterceptHoverEvent(event);
-    }*/
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
@@ -118,7 +123,7 @@ public class SlideView extends ViewGroup {
                 mLastXMove = mXDown;
                 Log.d("qhh_slide", ">>> onInterceptTouchEvent ACTION_DOWN mLastXMove " + mLastXMove);
                 break;
-            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_MOVE: //需要好好总结事件分发
                 mXMove = ev.getRawX();
                 mLastXMove = mXMove;
                 Log.d("qhh_slide", ">>> onInterceptTouchEvent ACTION_MOVE mLastXMove " + mLastXMove);
@@ -137,19 +142,39 @@ public class SlideView extends ViewGroup {
         return false;
     }
 
-   /* @Override
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        Log.v("qhh_slide","============================== onTouchEvent ==============================");
+        Log.v("qhh_slide", "============================== onTouchEvent ==============================");
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
                 mXMove = event.getRawX();
                 int srolledX = (int) (mLastXMove - mXMove);
-                scrollBy(srolledX,0);
+
+                //Log.i("qhh_move", ">>> getScrollX() = " + getScrollX());
+
+                /*if(getScrollX() + mViewWidth >= mRightBorder){
+                    //scrollTo(mLeftBorder,0);
+                    return true;
+                }else if(getScrollX() + mRightChildW >= mLeftBorder){
+                    //scrollTo(mRightBorder,0);
+                    return true;
+                }*/
+
+                scrollBy(srolledX, 0);
                 mLastXMove = mXMove;
-                Log.d("qhh_slide",">>> onTouchEvent ACTION_MOVE mLastXMove " + mLastXMove);
+
                 break;
             case MotionEvent.ACTION_UP:
+
+                int rightThrehold = mRightChildW / 2;
+                Log.i("qhh_move","rightThrehold = "+rightThrehold+" , getScrollX() = " + getScrollX());
+                if (getScrollX() >= rightThrehold) { //左滑
+                    mScroller.startScroll(getScrollX(), 0, getScrollX(), 0);
+                } /*else {
+                    mScroller.startScroll(getScrollX(), 0, -getScrollX(), 0);
+                }*/
+                invalidate();
 
                 break;
             default:
@@ -157,7 +182,7 @@ public class SlideView extends ViewGroup {
         }
 
         return true; //返回：true,则消耗事件，如果使用 super.onTouchEvent 可能会返回 false，则不会走 MOVE 事件。
-    }*/
+    }
 
     @Override
     public void computeScroll() {
