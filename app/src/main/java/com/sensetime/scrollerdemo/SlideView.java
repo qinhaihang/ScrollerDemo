@@ -168,13 +168,13 @@ public class SlideView extends ViewGroup {
             case MotionEvent.ACTION_UP:
 
                 int rightThrehold = mViewWidth + mRightChildW / 2;
-                Log.d("qhh_up",">>> rightThrehold = " + rightThrehold +" , getScrollX() " + getScrollX());
+                Log.d("qhh_up", ">>> rightThrehold = " + rightThrehold + " , getScrollX() " + getScrollX());
                 if (getScrollX() + mViewWidth >= rightThrehold) { //左滑
-                    Log.d("qhh_up",">>> left");
+                    Log.d("qhh_up", ">>> left");
                     mScroller.startScroll(getScrollX(), 0, mRightChildW - getScrollX(), 0);
-                } /*else {
+                } else {
                     mScroller.startScroll(getScrollX(), 0, -getScrollX(), 0);
-                }*/
+                }
                 invalidate();
 
                 break;
